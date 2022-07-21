@@ -2,8 +2,12 @@
   <div  class = "container">
    <h2 class=" text-center mt-5">My Vue Todo App</h2>
      <div class="d-flex ">
-      <input  v-model= "task" type= "text" placeholder= "Enter task" class= "form-control">
-     <button @click="submitTask"  class="btn btn-danger rounded-15">SUBMİT</button>
+      <input v-model= "task" type= "text"  placeholder= "Enter task"  style=  "width: 700px;" >
+     <button style="margin:12px;" @click="submitTask"  class="btn btn-danger rounded-25">SUBMİT</button>
+     <button style="margin:12px;" @click= "handleClick('to-do')" class="btn btn-danger rounded-25">TO DO</button>
+     <button  style="margin:12px;" @click= "handleClick('in-progress')" class="btn btn-danger rounded-25">İN PROGRESS</button>
+     <button style="margin:12px ;" @click= "handleClick( 'finished')" class="btn btn-danger rounded-25">FİNİSHED</button>
+     <button style="margin:12px ;" @click="clear()"  class="btn btn-danger rounded-25">Fılter</button>
     </div>
 
   
@@ -18,12 +22,12 @@
     </tr>
   </thead>
   <tbody>
-    <tr v-for="(task,index) in tasks" :key="index">
+    <tr v-for="(task,index) in filteredTasks" :key="index">
       <td>
-        <span class  = " 'finished': task.status ==='finished'}">{{task.name}}</span> </td>
+        <span :class  = " {'finished': task.status ==='finished'}">{{task.name}}</span> </td>
       <td style = "widht: 120px">
-        <span @click="changeStatues (İndex)" class = "pointer" :class= "{'text-danger': task.status ===   'to-do' , 
-        'text-warning': task.status === 'in-progress' , 
+        <span @click="changeStatus (index)" class = "pointer" :class= "{'text-danger': task.status ===   'to-do' , 
+        'text-warning': task.status === 'in-progress' ,
         'text-warning': task.status ===   'finished' 
         }  "
         
@@ -45,10 +49,16 @@
     </tr>
     
   </tbody>
-</table></div>
+</table>
+</div>
+
+
 </template>
 
 <script>
+
+
+
 export default {
   name: 'TodoApp',
   props: {
@@ -59,11 +69,36 @@ export default {
       task:'',
       editedTask:null,
       availableStatuses: [ 'to-do', 'in-progress','finished'],
+      filteredTasks : [],
 
       tasks: [
         {
           name: 'Steal bananas from the store ',
-          status:' to-do'
+          status:'to-do'
+        },
+        { 
+         name: 'Eat 1 kg chocolata in 1 hour.',
+          status:'in-progress'
+        },
+         {
+          name: 'Steal bananas from the store ',
+          status:'to-do'
+        },
+        { 
+         name: 'Eat 1 kg chocolata in 1 hour.',
+          status:'in-progress'
+        },
+         {
+          name: 'Steal bananas from the store ',
+          status:'to-do'
+        },
+        { 
+         name: 'Eat 1 kg chocolata in 1 hour.',
+          status:'in-progress'
+        },
+        {
+          name: 'Steal bananas from the store ',
+          status:'to-do'
         },
         { 
          name: 'Eat 1 kg chocolata in 1 hour.',
@@ -72,7 +107,19 @@ export default {
       ],
     }
   },
+mounted (){
+  this.filteredTasks = this.tasks;
+},
+
 methods: {
+clear(){
+  this.filteredTasks= this.tasks;
+
+},
+
+  handleClick(status){
+    this.filteredTasks = this.tasks.filter(item =>item.status === status);
+  },
   submitTask(){
   
    if(this.task.length === 0) return;
@@ -90,7 +137,11 @@ this.editedTask=null;
  
    this.task =  '';
   },
-  deleteTask(index){
+  
+
+
+ 
+ deleteTask(index){
     this.tasks.splice(index,1);
   
   },
@@ -120,5 +171,19 @@ firstCharUpper(str){
 .finished {
   text-decoration: line-through;
 }
+td {
+  transition: 100ms all;
+}
+td:hover {
+  background-color:antiquewhite;
+  cursor: pointer;
+}
+div {
+  background-color:aliceblue;
+}
+
+
+
+
 
 </style>
